@@ -1,6 +1,6 @@
 # Embedded Trip Checkout (concept)
 
-**Live demo:** LIVE_URL
+**Live demo:** https://embedded-xo-concept.vercel.app
 
 An interactive product concept: what if a guest could book a stay, rental car, airport ride, groceries and luggage storage in one Airbnb checkout, without ever leaving for a partner's site or app?
 
