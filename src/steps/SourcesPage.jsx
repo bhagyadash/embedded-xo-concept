@@ -13,13 +13,20 @@ const REAL = [
   ['Refund timing', 'Credit and PayPal in 24 hours, cards up to 15 business days.', 'refundTiming'],
   ['US payment entity', 'Airbnb Payments, Inc. Klarna is the creditor for pay-over-time.', 'payTerms'],
   ['Expedia owns CarTrawler', 'Deal completed by September 2026.', 'expediaCt'],
+  ['One contract for native products', 'Accommodations, Experiences and Services are all "Host Services".', 'terms'],
+  ['Collection agent model', 'Each Host appoints Airbnb Payments as its payment collection agent.', 'payTerms'],
+  ['Fees by product', 'Most home hosts 15.5%, services typically 15% with a $6 minimum, experiences typically 20%.', 'fees'],
+  ['Payments platform design', 'Airbnb says payment logic is decoupled from stays, experiences and services.', 'payLocal'],
 ];
 
 const ASSUMED = [
   ['Listing, host, dates and all prices', 'Invented sample data, including the 15% tax rate.', 'sample'],
   ['Saved card and $75 Airbnb Credit', 'Sample. The prototype never asks for real card details.', 'sample'],
   ['Welcome Pickups and Bounce in Nashville', 'Airbnb hasn\'t published US coverage for them. Assumed so the trip works.', 'unstated'],
-  ['Airbnb as merchant of record for partners', 'The core proposal. Not how it works today.', 'proposed'],
+  ['Payment model for partners', 'Collection agent and merchant of record are both proposals. Neither is how it works today.', 'proposed'],
+  ['Card disputes reach Airbnb first', 'Assumed because Airbnb would take the payment. Airbnb\'s guest terms don\'t cover chargebacks.', 'proposed'],
+  ['Hotel payment entity and rules', 'Not published. A summary of the Terms names Airbnb Travel, LLC for certain hotels; the exact US wording wasn\'t verified.', 'unstated'],
+  ['Generic pricing and tax models', 'From a search summary of an older engineering post that couldn\'t be opened.', 'unstated'],
   ['Partner cancellation windows', '48 hours for cars, 24 for rides, and so on. Partner terms weren\'t in the pages reviewed.', 'proposed'],
   ['15% grocery hold', 'Assumption to cover substitutions.', 'proposed'],
   ['Liability split and make-good limits', 'Proposed contract terms, to test with partners, legal and finance.', 'proposed'],

@@ -163,7 +163,7 @@ export default function StepIndustry() {
         </div>
         <div className="note note-warn" style={{ marginTop: 14 }}>
           <AlertTriangle size={16} aria-hidden="true" />
-          <span>Becoming merchant of record for rentals and groceries needs legal and tax review, including seller-of-travel rules, sales tax on goods, and insurance sold with a car. This concept doesn't resolve those.</span>
+          <span>Owning checkout doesn't have to mean owning the sale. Airbnb could collect as the partner's agent or become merchant of record, as Step 2 compares. Either needs legal and tax review, including seller-of-travel rules, sales tax on goods, and insurance sold with a car.</span>
         </div>
       </section>
 

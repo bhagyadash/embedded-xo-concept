@@ -35,5 +35,9 @@ export const SOURCES = {
   stripeAcp: { label: 'Stripe: Instant Checkout and Agentic Commerce Protocol', url: 'https://stripe.com/newsroom/news/stripe-openai-instant-checkout' },
   acpBack: { label: 'Rye: OpenAI scales back ChatGPT checkout (third party)', url: 'https://rye.com/blog/openai-chatgpt-checkout-agentic-commerce' },
   shop: { label: 'Shopify dev docs: Checkout Kit accelerated checkouts', url: 'https://shopify.dev/docs/storefronts/mobile/checkout-kit/accelerated-checkouts-overview' },
+  terms: { label: 'Airbnb Terms of Service (5 Feb 2026)', url: 'https://www.airbnb.com/terms' },
+  fees: { label: 'Airbnb Help 1857: Airbnb service fees', url: 'https://www.airbnb.com/help/article/1857' },
+  payLocal: { label: 'Airbnb Tech: Pay as a Local', url: 'https://airbnb.tech/payments/pay-as-a-local/' },
+  orchestration: { label: 'Airbnb Engineering: Rebuilding Payment Orchestration (seen via search summary only)', url: 'https://medium.com/airbnb-engineering/rebuilding-payment-orchestration-at-airbnb-341d194a781b' },
   chargeTime: { label: 'Chargebacks911: Visa chargeback time limits (vendor)', url: 'https://chargebacks911.com/visa-chargeback-time-limit/' },
 };

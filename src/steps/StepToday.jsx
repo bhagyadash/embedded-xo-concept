@@ -21,6 +21,7 @@ const NATIVE = [
     pay: ['full'], policy: <>Rate policy varies. Some non-refundable hotel listings are exempt from the 24-hour rule.<Cite id="cancel" /></>,
     perk: <>Price match credit up to $400 on eligible listings, and up to 15% back toward a future home.<Cite id="priceMatch" /></>,
     hero: 'hero-plum', note: 'Airbnb does not publish the hotel checkout steps. This screen is modeled on the home checkout.',
+    chargedBy: <>Not published for hotels. Airbnb's Terms appear to name Airbnb Travel, LLC for certain hotels.<Cite id="terms" /></>,
   },
   {
     id: 'experience', icon: Compass, name: 'Experiences', blurb: 'Hosted activities, paid on Airbnb.',
@@ -148,7 +149,7 @@ function NativeFlow({ p }) {
               <div className="note note-ok"><CheckCircle2 size={16} aria-hidden="true" /><span>Booked. It now lives in Trips.</span></div>
               <h3>{p.title}</h3>
               <small>{p.perk}</small>
-              <small>Charged by Airbnb Payments, Inc. for US guests.<Cite id="payTerms" /></small>
+              <small>{p.chargedBy ?? <>Charged by Airbnb Payments, Inc. for US guests.<Cite id="payTerms" /></>}</small>
               <button className="link" onClick={() => setStage(0)} style={{ justifySelf: 'start' }}>Start over</button>
             </>
           )}
@@ -270,7 +271,7 @@ export default function StepToday() {
               </div>
             ) : (
               <div className="facts">
-                <div><strong>Charged by:</strong> Airbnb Payments, Inc.</div>
+                <div><strong>Charged by:</strong> {p.chargedBy ?? 'Airbnb Payments, Inc.'}</div>
                 <div><span><strong>Cancellation:</strong> {p.policy}</span></div>
                 <div><span><strong>Protection:</strong> {p.perk}</span></div>
               </div>
@@ -299,7 +300,7 @@ export default function StepToday() {
             <thead><tr><th>Product</th><th>Checkout</th><th>Charged by</th><th>Pay later</th><th>Airbnb Credit</th><th>Support</th></tr></thead>
             <tbody>
               <tr><th>Homes</th><td>Airbnb</td><td>Airbnb Payments</td><td className="yes">Yes, if eligible<Cite id="rnpl" /></td><td className="yes">Yes</td><td>Airbnb</td></tr>
-              <tr><th>Boutique hotels</th><td>Airbnb</td><td>Airbnb Payments</td><td><Tag kind="unstated" /></td><td><Tag kind="unstated" /></td><td>Airbnb</td></tr>
+              <tr><th>Boutique hotels</th><td>Airbnb</td><td><Tag kind="unstated" /></td><td><Tag kind="unstated" /></td><td><Tag kind="unstated" /></td><td>Airbnb</td></tr>
               <tr><th>Experiences</th><td>Airbnb</td><td>Airbnb Payments</td><td><Tag kind="unstated" /></td><td className="yes">Yes</td><td>Airbnb</td></tr>
               <tr><th>Services</th><td>Airbnb</td><td>Airbnb Payments</td><td><Tag kind="unstated" /></td><td className="yes">Select services<Cite id="summer" /></td><td>Airbnb</td></tr>
               {PARTNERS.map((x) => (
@@ -307,6 +308,42 @@ export default function StepToday() {
               ))}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="section">
+        <h2>Why Homes, Hotels, Experiences and Services share one checkout</h2>
+        <p className="sub">They look like different businesses, but Airbnb treats them as the same transaction: a Guest books a Listing from a Host, and Airbnb collects the payment.</p>
+        <div className="lessons">
+          <div className="card stack">
+            <h3>One contract</h3>
+            <p>Accommodations, Experiences and Services all sit under "Host Services" in one set of Terms. The booking contract is between the guest and the Host.<Cite id="terms" /></p>
+          </div>
+          <div className="card stack">
+            <h3>One way of handling money</h3>
+            <p>Each Host appoints Airbnb Payments as its payment collection agent. Total Price and the payout formula work the same way across products.<Cite id="payTerms" /></p>
+          </div>
+          <div className="card stack">
+            <h3>One payments platform</h3>
+            <p>Airbnb says its platform decouples payment logic from stays, experiences and services,<Cite id="payLocal" /> and the server tells checkout what to show.</p>
+            <small>Older posts reportedly describe generic pricing and tax models.<Cite id="orchestration" /> That post couldn't be read directly.</small>
+          </div>
+        </div>
+        <h3 style={{ margin: '24px 0 10px' }}>What still differs by product</h3>
+        <div className="tablewrap">
+          <table>
+            <thead><tr><th></th><th>Homes</th><th>Hotels</th><th>Experiences</th><th>Services</th></tr></thead>
+            <tbody>
+              <tr><th>Airbnb fee<Cite id="fees" /></th><td>Most hosts pay 15.5%</td><td>Same single-fee model</td><td>Typically 20%</td><td>Typically 15%, $6 minimum</td></tr>
+              <tr><th>Payout timing<Cite id="payTerms" /></th><td>Business day after check-in</td><td><Tag kind="unstated" /></td><td>Business day after start</td><td>Business day after start</td></tr>
+              <tr><th>Cancellation</th><td>Host's chosen policy<Cite id="cancel" /></td><td><Tag kind="unstated" /></td><td>24 or 72 hours<Cite id="svcCancel" /></td><td>24 or 72 hours<Cite id="svcCancel" /></td></tr>
+              <tr><th>Guest protection</th><td>AirCover<Cite id="aircover" /></td><td><Tag kind="unstated" /></td><td>Separate refund policy<Cite id="svcRefund" /></td><td>Separate refund policy<Cite id="svcRefund" /></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="note" style={{ marginTop: 14 }}>
+          <AlertTriangle size={15} aria-hidden="true" />
+          <span><strong>Why partners don't fit today:</strong> CarTrawler or Instacart isn't a Host. Their inventory, prices and refunds sit in their own systems, and they take payment themselves.<Cite id="offers" /> Step 2 looks at how to bring them in.</span>
         </div>
       </section>
 

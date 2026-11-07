@@ -26,6 +26,7 @@ export default function App() {
   const [credit, setCredit] = useState(false);
   const [booked, setBooked] = useState(false);
   const [carFailed, setCarFailed] = useState(false);
+  const [model, setModel] = useState('agent');
 
   useEffect(() => {
     const onHash = () => {
@@ -68,10 +69,10 @@ export default function App() {
       <main className="page">
         {route === 'today' && <StepToday go={go} />}
         {route === 'embedded' && (
-          <StepEmbedded go={go} cart={cart} setCart={setCart} plan={plan} setPlan={setPlan} credit={credit} setCredit={setCredit} booked={booked} setBooked={setBooked} carFailed={carFailed} setCarFailed={setCarFailed} />
+          <StepEmbedded go={go} cart={cart} setCart={setCart} plan={plan} setPlan={setPlan} credit={credit} setCredit={setCredit} booked={booked} setBooked={setBooked} carFailed={carFailed} setCarFailed={setCarFailed} model={model} setModel={setModel} />
         )}
         {route === 'industry' && <StepIndustry go={go} />}
-        {route === 'after' && <StepAfter go={go} cart={cart} plan={plan} credit={credit} booked={booked} carFailed={carFailed} />}
+        {route === 'after' && <StepAfter go={go} cart={cart} plan={plan} credit={credit} booked={booked} carFailed={carFailed} model={model} setModel={setModel} />}
         {route === 'sources' && <SourcesPage />}
       </main>
       <footer className="foot">

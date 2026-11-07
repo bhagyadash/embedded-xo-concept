@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Check, Clock, Home, Car, PlaneLanding, ShoppingBasket, Luggage, PlaneTakeoff, UserX, PackageX, CreditCard, HomeIcon, CalendarDays, AlertTriangle, Link2 } from 'lucide-react';
-import { Cite, Tag, PageHead } from '../ui.jsx';
+import { Cite, Tag, PageHead, ModelToggle, MODELS } from '../ui.jsx';
 import { DEFAULT_CART, WHENS, buildLines, cancelQuote, money, schedule } from '../lib/pricing.js';
 
 const ICONS = { stay: Home, car: Car, ride: PlaneLanding, grocery: ShoppingBasket, luggage: Luggage };
@@ -217,7 +217,7 @@ function chargebackPath(line, reason, hasEvidence) {
         { day: 'Day 3', text: 'Risk team locks the account if a takeover looks likely, and cancels other upcoming items.' },
         { day: 'By day 30', text: hasEvidence ? 'Airbnb contests, with proof the real guest used the service.' : 'Airbnb accepts the chargeback.' }],
       ledger: hasEvidence ? { guest: 0, airbnb: 0, partner: 0 } : { guest: amt, airbnb: -amt, partner: 0 }, outcome: hasEvidence ? 'Contested' : 'Airbnb absorbs it',
-      note: 'Airbnb made the risk decision at checkout, so fraud loss sits with Airbnb, and the partner keeps its payment. This is proposed contract language.',
+      note: 'Airbnb made the risk decision at checkout, so fraud loss sits with Airbnb, and the partner keeps its payment. This is a proposed contract term.',
     };
   }
   return {
@@ -228,11 +228,11 @@ function chargebackPath(line, reason, hasEvidence) {
       { day: 'After', text: hasEvidence ? 'The card network process decides. Airbnb keeps the funds if it wins.' : `The amount is recovered from ${partner} at the next settlement.` }],
     ledger: hasEvidence ? { guest: 0, airbnb: 0, partner: 0 } : { guest: amt, airbnb: 0, partner: -amt },
     outcome: hasEvidence ? 'Contested with evidence' : 'Guest refunded, partner pays',
-    note: 'Airbnb is on the front line with the bank. The partner carries the cost when the failure is theirs. This is proposed contract language.',
+    note: 'Airbnb is on the front line with the bank. The partner carries the cost when the failure is theirs. This is a proposed contract term.',
   };
 }
 
-function ChargebackTab({ lines }) {
+function ChargebackTab({ lines, model, setModel }) {
   const [item, setItem] = useState(lines.find((l) => l.id === 'ride')?.id ?? lines[0].id);
   const [reason, setReason] = useState('notreceived');
   const [evidence, setEvidence] = useState(true);
@@ -241,7 +241,11 @@ function ChargebackTab({ lines }) {
   const fmt = (n) => (n === 0 ? '$0.00' : `${n > 0 ? '+' : ''}${money(n)}`);
   return (
     <div className="stack" style={{ gap: 20 }}>
-      <div className="note note-brand"><span>Becoming merchant of record moves partner disputes onto Airbnb's merchant account. That's the main cost of embedding, and the reason each item gets its own charge and evidence trail.</span></div>
+      <div className="note note-brand"><span>Airbnb takes the payment under either model, so we assume partner disputes reach Airbnb first. That's the main cost of embedding, and the reason each item gets its own charge and evidence trail. <Tag kind="proposed" /></span></div>
+      <div>
+        <h3 style={{ marginBottom: 8 }}>Which payment model?</h3>
+        <ModelToggle model={model} setModel={setModel} />
+      </div>
       <div>
         <h3 style={{ marginBottom: 8 }}>Which charge is disputed?</h3>
         <div className="chips" role="group" aria-label="Disputed item">
@@ -270,6 +274,11 @@ function ChargebackTab({ lines }) {
             <div><span>{line.id === 'stay' ? 'Host' : line.seller}</span><strong>{fmt(path.ledger.partner)}</strong></div>
           </div>
           <small>{path.note} Network dispute fees aren't modeled.</small>
+          {line.id !== 'stay' && (
+            <div className="note"><span><strong>{MODELS[model].name}:</strong> {model === 'agent'
+              ? `${line.seller} is the seller, so it owes the guest. Airbnb handles the dispute and can hold funds until the service starts.`
+              : `Airbnb is the seller, so it owes the guest even if ${line.seller} can't or won't repay.`}</span></div>
+          )}
         </aside>
       </div>
 
@@ -288,26 +297,27 @@ function ChargebackTab({ lines }) {
 }
 
 const OWNERSHIP = [
-  ['Merchant of record', 'Partner', 'Airbnb'],
-  ['Cancellation rules', 'Partner terms', 'Partner rules, shown and enforced in Airbnb'],
-  ['Issuing the refund', 'Partner', 'Airbnb, then settled with partner'],
-  ['Refund to Airbnb Credit', 'Not possible', 'Yes, if credit paid for it'],
-  ['First-line support', 'Partner', 'Airbnb'],
-  ['Fulfilment failure cost', 'Partner', 'Partner, by contract'],
-  ['Chargeback handling', 'Partner', 'Airbnb, with partner evidence'],
-  ['Fraud loss', 'Partner', 'Airbnb'],
-  ['Counter or doorstep extras', 'Supplier', 'Supplier (outside the checkout)'],
-  ['Sales tax and regulation', 'Partner', 'Open: needs legal and tax review'],
+  ['Legal seller', 'Partner', 'Partner', 'Airbnb'],
+  ['Takes the payment', 'Partner', 'Airbnb, as agent', 'Airbnb'],
+  ['Cancellation rules', 'Partner terms', 'Partner terms, shown in Airbnb', 'Agreed with partner, shown in Airbnb'],
+  ['Issuing the refund', 'Partner', 'Airbnb, funded by partner', 'Airbnb, then recovered from partner'],
+  ['Refund to Airbnb Credit', 'Not possible', 'Yes, if credit paid for it', 'Yes, if credit paid for it'],
+  ['First-line support', 'Partner', 'Airbnb', 'Airbnb'],
+  ['Who owes the guest on a failure', 'Partner', 'Partner', 'Airbnb, then recovers from partner'],
+  ['Handling card disputes', 'Partner', 'Airbnb, with partner evidence', 'Airbnb, with partner evidence'],
+  ['Fraud loss', 'Partner', 'Airbnb', 'Airbnb'],
+  ['Counter or doorstep extras', 'Supplier', 'Supplier', 'Supplier'],
+  ['Sales tax and regulation', 'Partner', 'Mostly partner, needs review', 'More on Airbnb, needs review'],
 ];
 
 function OwnershipTab() {
   return (
     <div className="stack">
-      <p className="muted" style={{ maxWidth: 700 }}>Today's column reflects Airbnb's published terms: the third party is merchant, processes payment, and handles support and refunds.<Cite id="offers" /> The concept column is a proposal to test with partners, legal and finance.</p>
+      <p className="muted" style={{ maxWidth: 700 }}>Today's column reflects Airbnb's published terms: the third party is merchant, processes payment, and handles support and refunds.<Cite id="offers" /> Both concept columns are proposals to test with partners, legal and finance.</p>
       <div className="tablewrap">
         <table>
-          <thead><tr><th>Responsibility</th><th>Today</th><th>In this concept</th></tr></thead>
-          <tbody>{OWNERSHIP.map(([a, b, c]) => <tr key={a}><th>{a}</th><td>{b}</td><td>{c}</td></tr>)}</tbody>
+          <thead><tr><th>Responsibility</th><th>Today</th><th>Collection agent</th><th>Merchant of record</th></tr></thead>
+          <tbody>{OWNERSHIP.map(([a, b, c, d]) => <tr key={a}><th>{a}</th><td>{b}</td><td>{c}</td><td>{d}</td></tr>)}</tbody>
         </table>
       </div>
     </div>
@@ -316,7 +326,7 @@ function OwnershipTab() {
 
 const TABS = [['cancel', 'Cancel and refund'], ['dispute', 'Disruptions and disputes'], ['cb', 'Chargebacks'], ['own', 'Who owns what']];
 
-export default function StepAfter({ cart, plan, credit, booked, carFailed }) {
+export default function StepAfter({ cart, plan, credit, booked, carFailed, model, setModel }) {
   const [tab, setTab] = useState('cancel');
   const usable = booked && Object.keys(cart).length > 0;
   const lines = useMemo(() => {
@@ -349,7 +359,7 @@ export default function StepAfter({ cart, plan, credit, booked, carFailed }) {
       </div>
       {tab === 'cancel' && <CancelTab key={lines.map((l) => l.id).join()} lines={lines} plan={effPlan} creditUsed={sched.creditUsed} />}
       {tab === 'dispute' && <DisputeTab />}
-      {tab === 'cb' && <ChargebackTab lines={lines} />}
+      {tab === 'cb' && <ChargebackTab lines={lines} model={model} setModel={setModel} />}
       {tab === 'own' && <OwnershipTab />}
       <div className="nextstep"><a className="btn" href="#/sources">Real vs. assumed</a></div>
     </>

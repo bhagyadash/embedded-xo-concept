@@ -8,8 +8,8 @@ An interactive product concept: what if a guest could book a stay, rental car, a
 
 ## The four steps
 
-1. **Today.** What a US guest can book now, with clickable flows. Homes, boutique hotels, Experiences and Services are paid on Airbnb. Car rentals, groceries, airport pickups and luggage storage are shown on Airbnb, but the partner runs checkout and is merchant of record.
-2. **Embedded checkout.** One cart, one payment method, one receipt. Offers and Airbnb Credit work across every item, and a live panel shows where the money goes. You can simulate a car selling out mid-payment.
+1. **Today.** What a US guest can book now, with clickable flows. Homes, boutique hotels, Experiences and Services are paid on Airbnb, and this step explains why they can share one checkout. Car rentals, groceries, airport pickups and luggage storage are shown on Airbnb, but the partner runs checkout and is merchant of record.
+2. **Embedded checkout.** One cart, one payment method, one receipt. Offers and Airbnb Credit work across every item, and a live panel shows where the money goes. It compares two payment models, collection agent and merchant of record. You can simulate a car selling out mid-payment.
 3. **Industry patterns.** Six ways platforms sell other companies' services, who owns each stage of the journey, lessons from what stalled, and a recommendation per service.
 4. **After booking.** A cancellation simulator with item-level refunds, seven disruption and dispute scenarios, a chargeback simulator with a liability ledger, and a table of who owns what.
 
@@ -36,13 +36,17 @@ Public facts were checked on Nov 6, 2026. The same tables, with links, are in th
 | 15.5% host fee | Third-party | [Hostfully](https://www.hostfully.com/blog/airbnb-host-fees/) |
 | Listing, host, dates, all prices, 15% tax rate | Sample | Invented for the demo |
 | Welcome Pickups and Bounce in Nashville | Assumed | US coverage isn't published |
-| Airbnb as merchant of record for partner items | Proposed | The core idea, not how it works today |
+| Payment model for partners (collection agent or merchant of record) | Proposed | Neither is how it works today; collection agent is the recommended start |
+| Card disputes reach Airbnb first under either model | Assumed | Airbnb's guest terms don't cover chargebacks |
+| Hotel payment entity, payout and cancellation rules | Not published | A summary of the Terms names Airbnb Travel, LLC for certain hotels; exact US wording unverified |
+| Collection agent model for Hosts | Real | [Payments Terms](https://www.airbnb.com/terms/payments_terms) |
+| Fees by product | Real | [Help 1857](https://www.airbnb.com/help/article/1857) |
 | Partner cancellation windows | Proposed | Partner terms weren't in the pages reviewed |
 | 15% grocery hold, liability split, make-good limits | Proposed | To test with partners, legal and finance |
 | Cleaning fee refunded before check-in | Assumed | The policy page doesn't address it directly |
 | Stage ownership in Step 3 | Our read | Unknown stages are marked "Not public" |
 
-Partner commission rates aren't public, so the prototype doesn't show any. Becoming merchant of record would need legal and tax review, including seller-of-travel rules, sales tax on goods, and insurance sold with a car.
+Partner commission rates aren't public, so the prototype doesn't show any. Either payment model would need legal and tax review, including seller-of-travel rules, sales tax on goods, and insurance sold with a car.
 
 ## Run it
 

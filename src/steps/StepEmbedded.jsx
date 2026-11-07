@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Car, ShoppingBasket, PlaneLanding, Luggage, Check, Loader2, AlertTriangle, ShieldCheck, Home, Info } from 'lucide-react';
-import { Cite, Tag, PageHead, Modal, Stepper, Radio, CottageArt } from '../ui.jsx';
+import { Cite, Tag, PageHead, Modal, Stepper, Radio, CottageArt, ModelToggle } from '../ui.jsx';
 import { STAY, CARS, CAR_DAYS, CAR_PROTECTION_PER_DAY, GROCERIES, DEFAULT_CART, GROCERY_HOLD_BUFFER, RIDE, BAG, buildLines, schedule, groceryCost, money, r2 } from '../lib/pricing.js';
 
 const CREDIT = 75;
@@ -161,7 +161,7 @@ function Confirmed({ lines, sched, carFailed, onSwapCar, onDropCar, plan, go, re
       </div>
       <div className="card card-soft stack">
         <h3>What the guest sees on their statement</h3>
-        <small>One merchant, one line per item, so each charge is easy to recognize. Format is proposed.</small>
+        <small>One name, one line per item, so each charge is easy to recognize. Format is proposed and needs card network review.</small>
         <div className="pricerows num">
           {lines.filter((l) => !(carFailed && l.id === 'car')).map((l) => {
             const when = l.id === 'grocery' ? 'on delivery' : l.id === 'stay' && plan === 'later' ? 'Dec 5' : 'today';
@@ -177,7 +177,7 @@ function Confirmed({ lines, sched, carFailed, onSwapCar, onDropCar, plan, go, re
   );
 }
 
-export default function StepEmbedded({ go, cart, setCart, plan, setPlan, credit, setCredit, booked, setBooked, carFailed, setCarFailed }) {
+export default function StepEmbedded({ go, cart, setCart, plan, setPlan, credit, setCredit, booked, setBooked, carFailed, setCarFailed, model, setModel }) {
   const [sheet, setSheet] = useState(null);
   const [consent, setConsent] = useState(false);
   const [phase, setPhase] = useState(booked ? 'done' : 'checkout');
@@ -336,15 +336,35 @@ export default function StepEmbedded({ go, cart, setCart, plan, setPlan, credit,
             <p style={{ marginTop: 14 }}><small>Gross by seller, before commissions. Airbnb's host fee is reported at 15.5%.<Cite id="hostFee" /> Partner commission terms aren't public, so none are shown.</small></p>
           </div>
           <div className="card">
-            <h3 style={{ marginBottom: 14 }}>Proposed payment model <Tag kind="proposed" /></h3>
+            <h3 style={{ marginBottom: 10 }}>Proposed payment model <Tag kind="proposed" /></h3>
+            <div style={{ marginBottom: 14 }}><ModelToggle model={model} setModel={setModel} /></div>
             <ol className="seq">
-              <li><b>1</b><span><strong>Airbnb is merchant of record</strong> for partner items, so one name appears on the card.</span></li>
+              <li><b>1</b><span>{model === 'agent'
+                ? <><strong>Airbnb collects as the partner's agent,</strong> as it does for Hosts. The partner stays the seller.</>
+                : <><strong>Airbnb is merchant of record</strong> and resells the partner's service to the guest.</>}</span></li>
               <li><b>2</b><span><strong>Each item is its own order</strong> with its own charge, refund and dispute trail.</span></li>
-              <li><b>3</b><span><strong>Partners confirm by API</strong> and get paid net on a settlement schedule.</span></li>
+              <li><b>3</b><span><strong>Partners confirm by API</strong> and {model === 'agent' ? 'are paid out after the service starts, less Airbnb\'s fee.' : 'get paid a net rate on a settlement schedule.'}</span></li>
               <li><b>4</b><span><strong>A partner failure never blocks the stay.</strong> The stay confirms first; a failed add-on isn't charged.</span></li>
               <li><b>5</b><span><strong>Variable amounts are held, not charged.</strong> Groceries capture the final amount on delivery. The {Math.round(GROCERY_HOLD_BUFFER * 100)}% hold buffer is an assumption.</span></li>
             </ol>
           </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <h2>Two ways to bring partners in <Tag kind="proposed" /></h2>
+        <p className="sub">The guest sees the same checkout either way. The difference is who legally sells the service, and who is exposed when something goes wrong.</p>
+        <div className="tablewrap">
+          <table>
+            <thead><tr><th></th><th>Collection agent</th><th>Merchant of record</th></tr></thead>
+            <tbody>
+              {MODEL_ROWS.map(([a, b, c]) => <tr key={a}><th>{a}</th><td>{b}</td><td>{c}</td></tr>)}
+            </tbody>
+          </table>
+        </div>
+        <div className="note note-brand" style={{ marginTop: 14 }}>
+          <Info size={16} aria-hidden="true" />
+          <span><strong>Recommendation:</strong> start with collection agent. It extends the model Airbnb already runs for Homes, Experiences and Services.<Cite id="payTerms" /> Use merchant of record only where Airbnb needs to control the price or the partner won't accept it. Either way, partners would need new contracts, and the choice needs legal and tax review.</span>
         </div>
       </section>
 
@@ -356,6 +376,16 @@ export default function StepEmbedded({ go, cart, setCart, plan, setPlan, credit,
     </>
   );
 }
+
+const MODEL_ROWS = [
+  ['Who sells to the guest', 'The partner, directly', 'Airbnb, which resells'],
+  ['Fit with Airbnb today', 'Extends the Host model', 'A new role for Airbnb'],
+  ['Refund rules', 'Partner terms, shown in Airbnb', 'Agreed with the partner, shown in Airbnb'],
+  ['Who owes the guest if the service fails', 'The partner', 'Airbnb, then recovers from the partner'],
+  ['Risk if a partner can\'t repay', 'Lower, if funds are held until the service starts', 'Higher: Airbnb owes the guest regardless'],
+  ['Tax and seller rules', 'Mostly with the partner, needs review', 'More falls on Airbnb, needs review'],
+  ['Price control', 'Partner sets the price', 'Airbnb can set the price above a net rate'],
+];
 
 const POLICY = {
   stay: 'Moderate. Full refund until 5 days before check-in.',

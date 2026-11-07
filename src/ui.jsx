@@ -101,6 +101,23 @@ export function Radio({ checked, onChange, title, sub, right, disabled, name }) 
   );
 }
 
+export const MODELS = {
+  agent: { name: 'Collection agent', sub: 'Partner stays the seller' },
+  mor: { name: 'Merchant of record', sub: 'Airbnb resells the service' },
+};
+
+export function ModelToggle({ model, setModel }) {
+  return (
+    <div className="chips" role="group" aria-label="Payment model">
+      {Object.entries(MODELS).map(([id, m]) => (
+        <button key={id} className={`chip ${model === id ? 'on' : ''}`} aria-pressed={model === id} onClick={() => setModel(id)}>
+          <strong>{m.name}</strong><small>{m.sub}</small>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 // Illustration used in place of listing photography.
 export function CottageArt({ className = '' }) {
   return (
