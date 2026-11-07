@@ -42,7 +42,7 @@ small { font-size: 13px; color: var(--muted); }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .num { font-variant-numeric: tabular-nums; }
 .muted { color: var(--muted); }
-.stack { display: grid; gap: 12px; }
+.stack { display: grid; gap: 12px; align-content: start; }
 .row { display: flex; align-items: center; gap: 10px; }
 .between { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .grow { flex: 1; min-width: 0; }
